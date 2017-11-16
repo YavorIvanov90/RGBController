@@ -78,6 +78,7 @@ public class PairedDevices extends AppCompatActivity {
     private class ConnectThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final BluetoothDevice mmDevice;
+        private final ConnectedThread mmThread;
 
         private final String TAG = "PairedDevices";
         private final UUID MY_UUID_INSECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -97,6 +98,7 @@ public class PairedDevices extends AppCompatActivity {
                 Log.e(TAG, "Socket's create() method failed", e);
             }
             mmSocket = tmp;
+            mmThread = new ConnectedThread(mmSocket);
         }
 
         public void run() {
@@ -120,8 +122,12 @@ public class PairedDevices extends AppCompatActivity {
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
             Intent intent = new Intent(PairedDevices.this, MainActivity.class);
+
             MainActivity.setDevice(mmDevice);
             MainActivity.setSocket(mmSocket);
+            MainActivity.setThread(mmThread);
+
+
             startActivity(intent);
             finish();
             return;
