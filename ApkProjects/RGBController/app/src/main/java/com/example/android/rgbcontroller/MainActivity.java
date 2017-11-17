@@ -117,8 +117,9 @@ public class MainActivity extends AppCompatActivity {
                         ledControl.setClickable(false);
                         mmDevice = null;
                         status_msg();
-                        mmThread.cancel();
-
+                        if (mmThread != null) {
+                            mmThread.cancel();
+                        }
                         break;
                     case BluetoothAdapter.STATE_TURNING_OFF:
                         break;
