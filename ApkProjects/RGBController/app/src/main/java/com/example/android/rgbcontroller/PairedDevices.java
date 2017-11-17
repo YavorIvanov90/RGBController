@@ -17,7 +17,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Set;
 import java.util.UUID;
 
@@ -109,6 +111,7 @@ public class PairedDevices extends AppCompatActivity {
                 // Connect to the remote device through the socket. This call blocks
                 // until it succeeds or throws an exception.
                 mmSocket.connect();
+
             } catch (IOException connectException) {
                 // Unable to connect; close the socket and return.
                 try {
