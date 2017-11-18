@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +37,7 @@ import android.os.Handler;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+    private static Intent intent;
     public static BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private static BluetoothDevice mmDevice;
     private static BluetoothSocket mmSocket;
@@ -50,6 +53,11 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar redBar;
     private SeekBar greenBar;
     private SeekBar blueBar;
+    private Switch aSwitch;
+    boolean switch_state;
+    private SharedPreferences sharedPref;
+    String deviceNameSaved;
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -84,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
     private TextView redBarValue;
     private TextView greenBarValue;
     private TextView blueBarValue;
@@ -99,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setThread(ConnectedThread thread) {
         mmThread = thread;
+    }
+
+    public static BluetoothDevice getDevice() {
+        return mmDevice;
     }
 
     @Override
@@ -124,10 +137,18 @@ public class MainActivity extends AppCompatActivity {
         buttonEnterHexColor = findViewById(R.id.hexColorButton);
 
         hexColor = findViewById(R.id.hexColor);
+        aSwitch = findViewById(R.id.switchBt);
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
 
+
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        if (sharedPref != null) {
+            switch_state = sharedPref.getBoolean("Switch", switch_state);
+            deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
+            aSwitch.setChecked(switch_state);
+        }
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Your device does not support Bluetooth.", Toast.LENGTH_SHORT).show();
             return;
@@ -150,9 +171,13 @@ public class MainActivity extends AppCompatActivity {
                 blueBarChange();
             }
         } else {
-            ledControl.setClickable(false);
-            buttonEnterHexColor.setClickable(false);
-            Toast.makeText(this, "No Bluetooth connection!", Toast.LENGTH_LONG).show();
+            if(switch_state){
+                autoConnect();
+            }else {
+                ledControl.setClickable(false);
+                buttonEnterHexColor.setClickable(false);
+                Toast.makeText(this, "No Bluetooth connection!", Toast.LENGTH_LONG).show();
+            }
         }
         status_msg();
     }
@@ -168,8 +193,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btList(View view) {
-        Intent intent = new Intent(MainActivity.this, PairedDevices.class);
+        intent = new Intent(MainActivity.this, PairedDevices.class);
         startActivity(intent);
+    }
+    public static Intent getIntentOwn(){
+        return intent;
     }
 
     public void ledStateControl(View view) {
@@ -228,6 +256,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 red_value = seekBar.getProgress();
+                Log.d("OnProgressChanges", Integer.toString(red_value));
+                updateValue();
             }
 
             @Override
@@ -237,9 +267,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // red_value = seekBar.getProgress();
-                Log.d("OnProgressChanges", Integer.toString(red_value));
-                redBarValue.setText(Integer.toString(red_value));
-                updateValue();
             }
         });
     }
@@ -249,6 +276,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 green_value = seekBar.getProgress();
+                Log.d("OnProgressChanges", Integer.toString(green_value));
+                greenBarValue.setText((Integer.toString(green_value)));
+                updateValue();
             }
 
             @Override
@@ -258,9 +288,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // green_value = seekBar.getProgress();
-                Log.d("OnProgressChanges", Integer.toString(green_value));
-                greenBarValue.setText((Integer.toString(green_value)));
-                updateValue();
             }
         });
     }
@@ -270,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 blue_value = seekBar.getProgress();
+                Log.d("OnProgressChanges", Integer.toString(blue_value));
+                blueBarValue.setText(Integer.toString(blue_value));
+                updateValue();
             }
 
             @Override
@@ -279,9 +309,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // blue_value = seekBar.getProgress();
-                Log.d("OnProgressChanges", Integer.toString(blue_value));
-                blueBarValue.setText(Integer.toString(blue_value));
-                updateValue();
             }
         });
     }
@@ -307,8 +334,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateColorDot() {
-        TextView colorDot = findViewById(R.id.color_dot);
-        colorDot.setTextColor(Color.rgb(red_value, green_value, blue_value));
+        View colorDot = findViewById(R.id.color_dot);
+        colorDot.setBackgroundColor(Color.rgb(red_value, green_value, blue_value));
     }
 
     private void enableBars() {
@@ -323,10 +350,38 @@ public class MainActivity extends AppCompatActivity {
         blueBar.setEnabled(false);
     }
 
+    private void autoConnect() {
+        final Set<BluetoothDevice> pairedDevices = MainActivity.mBluetoothAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+
+            for (final BluetoothDevice device : pairedDevices) {
+                //   final String deviceName = device.getName();
+                for (int i = 1; i < pairedDevices.size(); i++) {
+                    if (device.getName().equals(deviceNameSaved)) {
+                        ConnectThread new_thread = new ConnectThread(device);
+                        new_thread.run();
+                        if (mmDevice != null) {
+                            this.recreate();
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
     public void exit(View view) {
-        mBluetoothAdapter.disable();
+        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean("Switch", aSwitch.isChecked());
+        if (mmDevice != null) {
+            editor.putString("Name", mmDevice.getName());
+        }
+        editor.commit();
+       /* mBluetoothAdapter.disable();
         moveTaskToBack(true);
+
         android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(1);
+        System.exit(1);*/
     }
 }

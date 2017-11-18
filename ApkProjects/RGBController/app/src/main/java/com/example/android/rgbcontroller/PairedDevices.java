@@ -3,6 +3,7 @@ package com.example.android.rgbcontroller;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,12 +30,14 @@ import java.util.UUID;
 
 public class PairedDevices extends AppCompatActivity {
     public static BluetoothAdapter mBluetoothAdapter = MainActivity.mBluetoothAdapter;
+    public static Context context;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paired_devices);
+        context = this;
 
         final Set<BluetoothDevice> pairedDevices = MainActivity.mBluetoothAdapter.getBondedDevices();
         //    LinearLayout layout = (LinearLayout)findViewById(R.layout.paired_devices);
@@ -65,9 +68,11 @@ public class PairedDevices extends AppCompatActivity {
 
                             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) {
                                 device.createBond();
-                                ConnectThread thread = new ConnectThread(device);
+                                ConnectThread thread = new ConnectThread(device,PairedDevices.this);
                                 thread.start();
                                 Toast.makeText(PairedDevices.this, "Connecting to: " + deviceName, Toast.LENGTH_SHORT).show();
+
+
                             }
 
                         }
@@ -77,75 +82,13 @@ public class PairedDevices extends AppCompatActivity {
         }
     }
 
-    private class ConnectThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final BluetoothDevice mmDevice;
-        private final ConnectedThread mmThread;
-
-        private final String TAG = "PairedDevices";
-        private final UUID MY_UUID_INSECURE = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-
-
-        public ConnectThread(BluetoothDevice device) {
-            // Use a temporary object that is later assigned to mmSocket
-            // because mmSocket is final.
-            BluetoothSocket tmp = null;
-            mmDevice = device;
-
-            try {
-                // Get a BluetoothSocket to connect with the given BluetoothDevice.
-                // MY_UUID is the app's UUID string, also used in the server code.
-                tmp = device.createRfcommSocketToServiceRecord(MY_UUID_INSECURE);
-            } catch (IOException e) {
-                Log.e(TAG, "Socket's create() method failed", e);
-            }
-            mmSocket = tmp;
-            mmThread = new ConnectedThread(mmSocket);
-        }
-
-        public void run() {
-            // Cancel discovery because it otherwise slows down the connection.
-            mBluetoothAdapter.cancelDiscovery();
-
-            try {
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
-                mmSocket.connect();
-
-            } catch (IOException connectException) {
-                // Unable to connect; close the socket and return.
-                try {
-                    mmSocket.close();
-                } catch (IOException closeException) {
-                    Log.e(TAG, "Could not close the client socket", closeException);
-                }
-                return;
-            }
-
-            // The connection attempt succeeded. Perform work associated with
-            // the connection in a separate thread.
+    public  void returnToMain() {
+        if (MainActivity.getDevice() != null) {
             Intent intent = new Intent(PairedDevices.this, MainActivity.class);
-
-            MainActivity.setDevice(mmDevice);
-            MainActivity.setSocket(mmSocket);
-            MainActivity.setThread(mmThread);
-
-
             startActivity(intent);
             finish();
-            return;
-            //  manageMyConnectedSocket(mmSocket);
-        }
-
-        // Closes the client socket and causes the thread to finish.
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (IOException e) {
-                Log.e(TAG, "Could not close the client socket", e);
-            }
         }
     }
-
-
 }
+
+
