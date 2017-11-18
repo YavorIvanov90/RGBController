@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity {
                 blueBarChange();
             }
         } else {
-            if(switch_state){
+            if (switch_state) {
                 autoConnect();
-            }else {
+            } else {
                 ledControl.setClickable(false);
                 buttonEnterHexColor.setClickable(false);
                 Toast.makeText(this, "No Bluetooth connection!", Toast.LENGTH_LONG).show();
@@ -195,9 +195,6 @@ public class MainActivity extends AppCompatActivity {
     public void btList(View view) {
         intent = new Intent(MainActivity.this, PairedDevices.class);
         startActivity(intent);
-    }
-    public static Intent getIntentOwn(){
-        return intent;
     }
 
     public void ledStateControl(View view) {
