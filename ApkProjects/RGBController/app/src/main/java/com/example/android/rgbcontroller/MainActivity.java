@@ -14,8 +14,12 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -42,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private static BluetoothDevice mmDevice;
     private static BluetoothSocket mmSocket;
     private static ConnectedThread mmThread;
-    private static TextView msgView;
     private static int red_value = 0;
     private static int green_value = 0;
     private static int blue_value = 0;
@@ -53,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar redBar;
     private SeekBar greenBar;
     private SeekBar blueBar;
-    private Switch aSwitch;
-    boolean switch_state;
+    private static boolean switch_state;
+    private static boolean connected;
     private SharedPreferences sharedPref;
     String deviceNameSaved;
 
@@ -110,8 +113,16 @@ public class MainActivity extends AppCompatActivity {
         mmThread = thread;
     }
 
+    public static void setConnected(boolean connect) {
+        connected = connect;
+    }
+
     public static BluetoothDevice getDevice() {
         return mmDevice;
+    }
+
+    public static BluetoothSocket getSocket() {
+        return mmSocket;
     }
 
     @Override
@@ -125,8 +136,6 @@ public class MainActivity extends AppCompatActivity {
         greenBarValue = findViewById(R.id.greenBarValue);
         blueBarValue = findViewById(R.id.blueBarValue);
 
-        msgView = findViewById(R.id.BT_msg);
-
         redBar = findViewById(R.id.redBar);
         greenBar = findViewById(R.id.greenBar);
         blueBar = findViewById(R.id.blueBar);
@@ -137,18 +146,14 @@ public class MainActivity extends AppCompatActivity {
         buttonEnterHexColor = findViewById(R.id.hexColorButton);
 
         hexColor = findViewById(R.id.hexColor);
-        aSwitch = findViewById(R.id.switchBt);
+
+        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
+        //sharedPref = MainActivity.this.getPreferences(Context.MODE_PRIVATE);
 
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(mReceiver, filter);
 
-
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        if (sharedPref != null) {
-            switch_state = sharedPref.getBoolean("Switch", switch_state);
-            deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
-            aSwitch.setChecked(switch_state);
-        }
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Your device does not support Bluetooth.", Toast.LENGTH_SHORT).show();
             return;
@@ -163,6 +168,16 @@ public class MainActivity extends AppCompatActivity {
                 buttonEnable.setText("Disable BT");
                 buttonList.setClickable(true);
             }
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sharedPref != null) {
+            switch_state = sharedPref.getBoolean("Switch", switch_state);
+            deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
         }
         if (mmDevice != null) {
             if (mmDevice.getBondState() == 12) {
@@ -182,6 +197,36 @@ public class MainActivity extends AppCompatActivity {
         status_msg();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_1: {
+                intent = new Intent(MainActivity.this, Settings.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.item_2: {
+                intent = new Intent(MainActivity.this, RGBControl.class);
+                startActivity(intent);
+                break;
+            }
+            case R.id.item_3: {
+                intent = new Intent(MainActivity.this, Relays.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
     public void btEnable(View view) {
         final int REQUEST_ENABLE_BT = 1;
         if (!mBluetoothAdapter.isEnabled()) {
@@ -195,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
     public void btList(View view) {
         intent = new Intent(MainActivity.this, PairedDevices.class);
         startActivity(intent);
+        // finish();
     }
 
     public void ledStateControl(View view) {
@@ -235,13 +281,13 @@ public class MainActivity extends AppCompatActivity {
         TextView status = findViewById(R.id.status);
         if (mmDevice != null) {
             if (mmDevice.getBondState() == 12) {
-                //  Toast.makeText(this, "Connected to: " + mmDevice.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Connected to: " + mmDevice.getName(), Toast.LENGTH_LONG).show();
                 dot.setImageResource(R.drawable.green_dot);
                 status.setText("Connected to: " + mmDevice.getName());
                 enableBars();
             }
         } else {
-            //   Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Disconnected", Toast.LENGTH_LONG).show();
             dot.setImageResource(R.drawable.red_dot);
             status.setText("Disconnected");
             disableBars();
@@ -368,17 +414,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void exit(View view) {
-        sharedPref = this.getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("Switch", aSwitch.isChecked());
-        if (mmDevice != null) {
-            editor.putString("Name", mmDevice.getName());
-        }
-        editor.commit();
-       /* mBluetoothAdapter.disable();
-        moveTaskToBack(true);
 
+        try {
+            mmSocket.close();
+        } catch (IOException e) {
+
+        }
+        System.exit(1);
+        mBluetoothAdapter.disable();
+      /*  moveTaskToBack(true);
         android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(1);*/
+       */
     }
 }

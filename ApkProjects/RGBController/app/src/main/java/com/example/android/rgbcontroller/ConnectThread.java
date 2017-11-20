@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,9 +82,14 @@ public class ConnectThread extends Thread {
             // Connect to the remote device through the socket. This call blocks
             // until it succeeds or throws an exception.
             mmSocket.connect();
-
+            MainActivity.setConnected(true);
         } catch (IOException connectException) {
             // Unable to connect; close the socket and return.
+            if(pair!=null) {
+                pair.setConnected(false);
+                pair.msg_status();
+               // pair.returnToMain();
+            }
             try {
                 mmSocket.close();
             } catch (IOException closeException) {
@@ -98,6 +105,8 @@ public class ConnectThread extends Thread {
         MainActivity.setDevice(mmDevice);
         MainActivity.setSocket(mmSocket);
         MainActivity.setThread(mmThread);
+
+
         if (pair != null) {
             pair.returnToMain();
             pair = null;
