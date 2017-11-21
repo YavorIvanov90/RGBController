@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:id="@+id/switch1Layout"
         android:layout_width="match_parent"
@@ -29,7 +28,6 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/switch2Layout"
         android:layout_width="match_parent"
@@ -54,7 +52,6 @@
             android:layout_weight="1" />
 
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,9 +72,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="center">
-
         </NumberPicker>
-
     </LinearLayout>
-
 </LinearLayout>

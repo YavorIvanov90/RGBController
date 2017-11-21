@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Switch;
+import android.widget.TextView;
 
 /**
  * Created by knock on 20-Nov-17.
@@ -34,13 +35,13 @@ public class Settings extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
-
+        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
 
         aSwitch = findViewById(R.id.switch1);
         numberOfRelaysPicker = (NumberPicker) findViewById(R.id.number_of_relays);
 
-        numberOfRelaysPicker.setMinValue(1);
-        numberOfRelaysPicker.setMaxValue(10);
+        numberOfRelaysPicker.setMinValue(0);
+        numberOfRelaysPicker.setMaxValue(50);
         numberOfRelaysPicker.setWrapSelectorWheel(false);
 
         numberOfRelaysPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -53,12 +54,13 @@ public class Settings extends AppCompatActivity {
         });
 
 
-        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+
 
         if (sharedPref != null) {
             switch_state = sharedPref.getBoolean("Switch", switch_state);
             deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
             numberOfRelays = sharedPref.getInt("Relays", 0);
+            numberOfRelaysPicker.setValue(numberOfRelays);
             aSwitch.setChecked(switch_state);
         }
 
@@ -89,7 +91,6 @@ public class Settings extends AppCompatActivity {
         }
 
     }
-
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
