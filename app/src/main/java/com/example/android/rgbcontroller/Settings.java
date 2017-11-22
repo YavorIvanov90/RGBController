@@ -11,11 +11,14 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by knock on 20-Nov-17.
@@ -23,74 +26,98 @@ import android.widget.TextView;
 
 public class Settings extends AppCompatActivity {
 
-    private Switch aSwitch;
+    private Switch aSwitch1;
+    private Switch aSwitch2;
     private SharedPreferences sharedPref;
-    private boolean switch_state;
+    private boolean switch1_state = false;
+    private boolean switch2_state = false;
     private String deviceNameSaved;
     private Intent intent;
 
     private int numberOfRelays;
-    private NumberPicker numberOfRelaysPicker;
+    private TextView numberOfRelaysText;
+    private Button buttonPlus;
+    private Button buttonMinus;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPref.edit();
 
-        aSwitch = findViewById(R.id.switch1);
-        numberOfRelaysPicker = (NumberPicker) findViewById(R.id.number_of_relays);
+        aSwitch1 = findViewById(R.id.switch1);
+        aSwitch2 = findViewById(R.id.switch2);
 
-        numberOfRelaysPicker.setMinValue(0);
-        numberOfRelaysPicker.setMaxValue(50);
-        numberOfRelaysPicker.setWrapSelectorWheel(false);
+        numberOfRelaysText = findViewById(R.id.numberOfRelays);
+        buttonPlus = findViewById(R.id.buttonPlus);
+        buttonMinus = findViewById(R.id.buttonMinus);
 
-        numberOfRelaysPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt("Relays",i1);
-                editor.commit();
+            public void onClick(View v) {
+                if (numberOfRelays == 50) {
+                    Toast.makeText(Settings.this, "Max 50 relays", Toast.LENGTH_SHORT).show();
+                } else {
+                    numberOfRelays += 1;
+                    numberOfRelaysText.setText(numberOfRelays);
+                }
+            }
+        });
+        buttonMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numberOfRelays == 0) {
+                    Toast.makeText(Settings.this, "Min 0 relays", Toast.LENGTH_SHORT).show();
+                } else {
+                    numberOfRelays -= 1;
+                    numberOfRelaysText.setText(numberOfRelays);
+                }
             }
         });
 
-
-
+        aSwitch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean("Switch2", aSwitch2.isChecked());
+            }
+        });
 
         if (sharedPref != null) {
-            switch_state = sharedPref.getBoolean("Switch", switch_state);
+            switch1_state = sharedPref.getBoolean("Switch1", switch1_state);
+            switch2_state = sharedPref.getBoolean("Switch2", switch2_state);
             deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
             numberOfRelays = sharedPref.getInt("Relays", 0);
-            numberOfRelaysPicker.setValue(numberOfRelays);
-            aSwitch.setChecked(switch_state);
+            numberOfRelaysText.setText(numberOfRelays);
+            aSwitch1.setChecked(switch1_state);
         }
 
         if (MainActivity.getDevice() != null) {
-            aSwitch.setClickable(true);
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            aSwitch1.setClickable(true);
+            aSwitch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean("Switch", aSwitch.isChecked());
+
+                    editor.putBoolean("Switch1", aSwitch1.isChecked());
                     editor.putString("Name", MainActivity.getDevice().getName());
                     editor.commit();
                 }
             });
         } else if (deviceNameSaved != null) {
-            aSwitch.setClickable(true);
-            aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            aSwitch1.setClickable(true);
+            aSwitch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                     SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean("Switch", aSwitch.isChecked());
+                    editor.putBoolean("Switch1", aSwitch1.isChecked());
                     editor.putString("Name", deviceNameSaved);
                     editor.commit();
                 }
             });
         } else {
-            aSwitch.setClickable(false);
+            aSwitch1.setClickable(false);
         }
-
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);

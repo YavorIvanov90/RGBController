@@ -33,18 +33,23 @@ import java.util.jar.Attributes;
 public class Relays extends AppCompatActivity {
 
     private Intent intent;
-    private SharedPreferences sharedPref;
+    private SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+    ;
     private LinearLayout layout;
     private int numberOfRelays;
+    private boolean save_state;
+    private final SharedPreferences.Editor editor = sharedPref.edit();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relays);
 
-        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        //sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+        // final SharedPreferences.Editor editor = sharedPref.edit();
 
-        numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
+       // save_state = sharedPref.getBoolean("Switch2", false);
+       // numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
 
 
         layout = findViewById(R.id.relays_layout);
@@ -63,14 +68,18 @@ public class Relays extends AppCompatActivity {
                 layout2.setLayoutParams(param);
                 layout2.setOrientation(LinearLayout.HORIZONTAL);
                 final Switch mSwitch = new Switch(this);
-                TextView mView = new TextView(this);
+                final TextView mView = new TextView(this);
                 layout2.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
                 mView.setLayoutParams(param2);
                 mView.setText("Relay: " + i);
                 mView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 mView.setTextColor(Color.BLACK);
                 mSwitch.setLayoutParams(param3);
-                mSwitch.setChecked(false);
+                if (save_state) {
+                    mSwitch.setChecked(sharedPref.getBoolean(mView.getText().toString(), false));
+                } else {
+                    mSwitch.setChecked(false);
+                }
                 mSwitch.setClickable(true);
                 mSwitch.setId(i);
                 layout2.addView(mView);
@@ -80,6 +89,9 @@ public class Relays extends AppCompatActivity {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         boolean status = compoundButton.isChecked();
+                        if (save_state) {
+                            editor.putBoolean(mView.getText().toString(), compoundButton.isChecked());
+                        }
                         sendData(mSwitch.getId(), status);
                     }
                 });
@@ -119,11 +131,18 @@ public class Relays extends AppCompatActivity {
         value += ":" + status + '\n';
         try {
             MainActivity.getThread().write(value.getBytes());
-        }catch (NullPointerException e){
-            Log.e("Relays",e.toString());
+        } catch (NullPointerException e) {
+            Log.e("Relays", e.toString());
             Switch aSwitch = findViewById(id);
             aSwitch.setChecked(false);
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        save_state = sharedPref.getBoolean("Switch2", false);
+        numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
     }
 }

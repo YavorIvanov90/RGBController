@@ -1,132 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <Button
-        android:id="@+id/onOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:onClick="ledStateControl"
-        android:text="LED ON" />
+    android:layout_height="match_parent"
+    android:background="#fefbd8">
 
 
     <LinearLayout
         android:id="@+id/barsLayout"
+        android:layout_below="@id/color_dot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="4dp">
+        android:layout_margin="4dp"
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/redBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp">
-
-        <SeekBar
-            android:id="@+id/redBar"
-            android:layout_weight="9"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/redBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/enableDisableButton"
-            android:max="255"
-            android:min="0"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:progressTint="@android:color/holo_red_light"
-            android:thumbTint="@android:color/holo_red_light" />
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_weight="1"
-            android:id="@+id/redBarValue"
-            android:layout_width="0dp"
+            <SeekBar
+                android:id="@+id/redBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/enableDisableButton"
+                android:layout_weight="9"
+                android:max="255"
+                android:min="0"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:progressTint="@android:color/holo_red_light"
+                android:thumbTint="@android:color/holo_red_light" />
+
+            <TextView
+                android:id="@+id/redBarValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:text="0"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/greenBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:text="0"
-            android:textColor="@android:color/holo_red_light"
-            android:textSize="20sp" />
-    </LinearLayout>
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/greenBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
+            <SeekBar
+                android:id="@+id/greenBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:max="255"
+                android:min="0"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:progressTint="@android:color/holo_green_light"
+                android:thumbTint="@android:color/holo_green_light" />
 
-        <SeekBar
-            android:id="@+id/greenBar"
-            android:layout_weight="9"
-            android:layout_width="0dp"
+            <TextView
+                android:id="@+id/greenBarValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_weight="1"
+                android:text="0"
+                android:textColor="@android:color/holo_green_light"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/blueBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="255"
-            android:min="0"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:progressTint="@android:color/holo_green_light"
-            android:thumbTint="@android:color/holo_green_light" />
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/greenBarValue"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:text="0"
-            android:textColor="@android:color/holo_green_light"
-            android:textSize="20sp" />
-    </LinearLayout>
+            <SeekBar
+                android:id="@+id/blueBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/greenBar"
+                android:layout_weight="9"
+                android:max="255"
+                android:min="0"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:progressTint="@android:color/holo_blue_light"
+                android:thumbTint="@android:color/holo_blue_light" />
 
+            <TextView
+                android:id="@+id/blueBarValue"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/greenBar"
+                android:layout_gravity="center"
+                android:layout_marginLeft="30dp"
+                android:layout_toLeftOf="@+id/dot"
+                android:layout_toStartOf="@+id/dot"
+                android:layout_weight="1"
+                android:text="0"
+                android:textColor="@android:color/holo_blue_light"
+                android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/blueBarLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:orientation="horizontal">
-
-        <SeekBar
-            android:id="@+id/blueBar"
-            android:layout_weight="9"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/greenBar"
-            android:max="255"
-            android:min="0"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:progressTint="@android:color/holo_blue_light"
-            android:thumbTint="@android:color/holo_blue_light" />
-
-        <TextView
-            android:id="@+id/blueBarValue"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/greenBar"
-            android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
-            android:layout_toLeftOf="@+id/dot"
-            android:layout_toStartOf="@+id/dot"
-            android:text="0"
-            android:textColor="@android:color/holo_blue_light"
-            android:textSize="20sp" />
-
-    </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -159,18 +151,84 @@
             android:onClick="enterHexColor"
             android:text="Enter" />
 
-        <View
-            android:id="@+id/color_dot"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:background="@android:color/white" />
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/modeLayoutMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hexColorLayout"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
 
-        android:layout_width="90dp"
-        android:layout_height="20dp"
-        android:layout_below="@id/blueBarLayout" />
 
+        <LinearLayout
+            android:id="@+id/modeLayout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hexColorLayout"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/modeLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hexColorLayout"
+            android:layout_toRightOf="@+id/modeLayout1"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/color_dot"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_margin="10dp"
+        android:background="@android:color/black" />
+
+    <Button
+        android:id="@+id/onOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/modeLayoutMain"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:onClick="ledStateControl"
+        android:text="LED ON" />
 </RelativeLayout>
