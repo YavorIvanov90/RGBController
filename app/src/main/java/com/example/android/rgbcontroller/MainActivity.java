@@ -80,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
                     case BluetoothAdapter.STATE_ON:
                         buttonList.setClickable(true);
                         buttonEnable.setText("Disable BT");
-                        buttonDisconect.setClickable(false);
 
                         break;
                     case BluetoothAdapter.STATE_TURNING_ON:
@@ -141,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
             if (!mBluetoothAdapter.isEnabled()) {
                 buttonEnable.setText("Enable BT");
                 buttonList.setClickable(false);
+                buttonDisconect.setClickable(false);
                 mmDevice = null;
             } else {
                 buttonEnable.setText("Disable BT");
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (mmDevice != null) {
             if (mmDevice.getBondState() == 12) {
+                buttonDisconect.setClickable(true);
             }
         } else {
             if (switch_state) {
@@ -215,12 +216,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         // finish();
     }
-
     public void disconnect(View view){
-        try {
-            mmSocket.close();
-        }catch (IOException e){
-            Log.e("Main Activity", e.toString());
+        if(mmSocket!=null) {
+            try {
+                mmSocket.close();
+            } catch (IOException e) {
+                Log.e("Main Activity", e.toString());
+            }
         }
     }
 
