@@ -33,7 +33,7 @@ public class Relays extends AppCompatActivity {
 
     private Intent intent;
     private SharedPreferences sharedPref;
-    private ScrollView layout;
+    private LinearLayout layout;
     private int numberOfRelays;
 
     @Override
@@ -71,6 +71,7 @@ public class Relays extends AppCompatActivity {
                 mSwitch.setLayoutParams(param3);
                 mSwitch.setChecked(false);
                 mSwitch.setClickable(true);
+                mSwitch.setId(i);
                 layout2.addView(mView);
                 layout2.addView(mSwitch);
                 layout1.addView(layout2);
@@ -114,7 +115,7 @@ public class Relays extends AppCompatActivity {
 
     private void sendData(int id, boolean status) {
         String value = Integer.toString(id);
-        value+= ":" + status + "R";
+        value+= ":" + status + '\n';
         MainActivity.getThread().write(value.getBytes());
     }
 }
