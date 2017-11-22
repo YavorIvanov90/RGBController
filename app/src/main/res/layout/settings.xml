@@ -67,6 +67,7 @@
             android:textSize="20sp" />
 
         <NumberPicker
+            android:scrollbarStyle="outsideInset"
             android:id="@+id/number_of_relays"
             android:layout_weight="1"
             android:layout_width="50dp"

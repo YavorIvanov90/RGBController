@@ -10,6 +10,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ButtonBarLayout;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -115,7 +116,14 @@ public class Relays extends AppCompatActivity {
 
     private void sendData(int id, boolean status) {
         String value = Integer.toString(id);
-        value+= ":" + status + '\n';
-        MainActivity.getThread().write(value.getBytes());
+        value += ":" + status + '\n';
+        try {
+            MainActivity.getThread().write(value.getBytes());
+        }catch (NullPointerException e){
+            Log.e("Relays",e.toString());
+            Switch aSwitch = findViewById(id);
+            aSwitch.setChecked(false);
+
+        }
     }
 }

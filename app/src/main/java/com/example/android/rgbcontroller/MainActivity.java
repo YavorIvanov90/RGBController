@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonEnable;
     private Button buttonList;
     private Button ledControl;
+    private Button buttonDisconect;
 
     private static boolean switch_state;
     private static boolean connected;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     case BluetoothAdapter.STATE_OFF:
                         buttonList.setClickable(false);
                         buttonEnable.setText("Enable BT");
+
                         mmDevice = null;
                         if (mmThread != null) {
                             mmThread.cancel();
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                     case BluetoothAdapter.STATE_ON:
                         buttonList.setClickable(true);
                         buttonEnable.setText("Disable BT");
+                        buttonDisconect.setClickable(false);
 
                         break;
                     case BluetoothAdapter.STATE_TURNING_ON:
@@ -124,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         buttonEnable = findViewById(R.id.enableDisableButton);
         buttonList = findViewById(R.id.listButton);
+        buttonDisconect = findViewById(R.id.disconnectButton);
 
 
         sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
@@ -210,6 +214,14 @@ public class MainActivity extends AppCompatActivity {
         intent = new Intent(MainActivity.this, PairedDevices.class);
         startActivity(intent);
         // finish();
+    }
+
+    public void disconnect(View view){
+        try {
+            mmSocket.close();
+        }catch (IOException e){
+            Log.e("Main Activity", e.toString());
+        }
     }
 
     private void status_msg() {
