@@ -26,8 +26,8 @@
             android:label="Relays"></activity>
         <activity
             android:name=".RGBControl"
-            android:label="RGB control"
-            android:configChanges="orientation" >
+            android:label="RGB control">
+         <!--   android:configChanges="orientation"-->
         </activity>
     </application>
 
