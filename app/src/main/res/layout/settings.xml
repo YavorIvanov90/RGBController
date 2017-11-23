@@ -28,6 +28,7 @@
             android:layout_weight="1" />
 
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/switch2Layout"
         android:layout_width="match_parent"
@@ -37,57 +38,51 @@
         android:padding="10dp">
 
         <TextView
-            android:layout_gravity="center"
             android:id="@+id/switch2_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="2"
             android:text="Save relays states"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 
         <Switch
-            android:layout_gravity="center"
             android:id="@+id/switch2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <TextView
-            android:layout_gravity="center"
-            android:layout_weight="6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="6"
             android:text="Number of Relays"
             android:textColor="@android:color/black"
             android:textSize="20sp" />
 
-       <!-- <NumberPicker
-            android:scrollbarStyle="outsideInset"
-            android:id="@+id/number_of_relays"
-            android:solidColor="@android:color/holo_blue_light"
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center">
-        </NumberPicker>
-        -->
         <Button
             android:id="@+id/buttonPlus"
-            android:layout_gravity="center"
             android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:text="+"
 
             />
+
         <TextView
             android:id="@+id/numberOfRelays"
             android:layout_width="wrap_content"
@@ -96,16 +91,17 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="0"
-            android:textSize="24sp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
         <Button
             android:id="@+id/buttonMinus"
-            android:layout_gravity="center"
             android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:layout_height="wrap_content"
-            android:text="-"/>
+            android:text="-" />
 
     </LinearLayout>
 </LinearLayout>

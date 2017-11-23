@@ -3,6 +3,7 @@ package com.example.android.rgbcontroller;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -153,7 +154,7 @@ public class RGBControl extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 red_value = seekBar.getProgress();
-                valueToSend = Integer.toString(red_value) + "R!"+ '\n';
+                valueToSend = Integer.toString(red_value) + "R!" + '\n';
                 Log.d("OnProgressChanges", Integer.toString(red_value));
                 updateValue();
             }
@@ -174,7 +175,7 @@ public class RGBControl extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 green_value = seekBar.getProgress();
-                valueToSend = Integer.toString(green_value) + "G!"+ '\n';
+                valueToSend = Integer.toString(green_value) + "G!" + '\n';
                 //Log.i("OnProgressChanges", Integer.toString(green_value));
                 greenBarValue.setText((Integer.toString(green_value)));
                 updateValue();
@@ -196,8 +197,8 @@ public class RGBControl extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 blue_value = seekBar.getProgress();
-                valueToSend = Integer.toString(blue_value) + "B!"+ '\n';
-              //  Log.i("OnProgressChanges", Integer.toString(blue_value));
+                valueToSend = Integer.toString(blue_value) + "B!" + '\n';
+                //  Log.i("OnProgressChanges", Integer.toString(blue_value));
                 blueBarValue.setText(Integer.toString(blue_value));
                 updateValue();
             }
@@ -229,9 +230,9 @@ public class RGBControl extends AppCompatActivity {
 
         string = Integer.toString(red_value) + "." + Integer.toString(green_value) + "." + Integer.toString(blue_value) + ")";
         // mmThread.write(string.getBytes());
-        if (valueToSend!=null) {
+        if (valueToSend != null) {
             mmThread.write(valueToSend.getBytes());
-            Log.i("RGBController",valueToSend);
+            Log.i("RGBController", valueToSend);
             updateColorDot();
         }
     }
@@ -252,4 +253,17 @@ public class RGBControl extends AppCompatActivity {
         greenBar.setEnabled(false);
         blueBar.setEnabled(false);
     }
+/*
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+           // setContentView(R.layout.rgb_control);
+            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+        }
+    }*/
 }

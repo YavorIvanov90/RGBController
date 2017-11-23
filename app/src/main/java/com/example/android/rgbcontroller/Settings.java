@@ -52,6 +52,17 @@ public class Settings extends AppCompatActivity {
         buttonPlus = findViewById(R.id.buttonPlus);
         buttonMinus = findViewById(R.id.buttonMinus);
 
+        if (sharedPref != null) {
+            switch1_state = sharedPref.getBoolean("Switch1", switch1_state);
+            switch2_state = sharedPref.getBoolean("Switch2", switch2_state);
+            aSwitch1.setChecked(switch1_state);
+            aSwitch2.setChecked(switch2_state);
+            deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
+            numberOfRelays = sharedPref.getInt("Relays", 0);
+            numberOfRelaysText.setText(String.valueOf(numberOfRelays));
+
+        }
+
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +70,9 @@ public class Settings extends AppCompatActivity {
                     Toast.makeText(Settings.this, "Max 50 relays", Toast.LENGTH_SHORT).show();
                 } else {
                     numberOfRelays += 1;
-                    numberOfRelaysText.setText(numberOfRelays);
+                    numberOfRelaysText.setText(String.valueOf(numberOfRelays));
+                    editor.putInt("Relays",numberOfRelays);
+                    editor.commit();
                 }
             }
         });
@@ -70,7 +83,9 @@ public class Settings extends AppCompatActivity {
                     Toast.makeText(Settings.this, "Min 0 relays", Toast.LENGTH_SHORT).show();
                 } else {
                     numberOfRelays -= 1;
-                    numberOfRelaysText.setText(numberOfRelays);
+                    numberOfRelaysText.setText(String.valueOf(numberOfRelays));
+                    editor.putInt("Relays",numberOfRelays);
+                    editor.commit();
                 }
             }
         });
@@ -79,17 +94,11 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 editor.putBoolean("Switch2", aSwitch2.isChecked());
+                editor.commit();
             }
         });
 
-        if (sharedPref != null) {
-            switch1_state = sharedPref.getBoolean("Switch1", switch1_state);
-            switch2_state = sharedPref.getBoolean("Switch2", switch2_state);
-            deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
-            numberOfRelays = sharedPref.getInt("Relays", 0);
-            numberOfRelaysText.setText(numberOfRelays);
-            aSwitch1.setChecked(switch1_state);
-        }
+
 
         if (MainActivity.getDevice() != null) {
             aSwitch1.setClickable(true);

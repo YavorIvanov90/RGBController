@@ -33,23 +33,23 @@ import java.util.jar.Attributes;
 public class Relays extends AppCompatActivity {
 
     private Intent intent;
-    private SharedPreferences sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+    private SharedPreferences sharedPref;// = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
     ;
     private LinearLayout layout;
     private int numberOfRelays;
     private boolean save_state;
-    private final SharedPreferences.Editor editor = sharedPref.edit();
+   // private final SharedPreferences.Editor editor= sharedPref.edit();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.relays);
 
-        //sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-        // final SharedPreferences.Editor editor = sharedPref.edit();
+        sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+         final SharedPreferences.Editor editor = sharedPref.edit();
 
        // save_state = sharedPref.getBoolean("Switch2", false);
-       // numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
+       numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
 
 
         layout = findViewById(R.id.relays_layout);

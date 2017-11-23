@@ -61,10 +61,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/exit"
-                android:layout_alignParentBottom="true"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@+id/dot"
+                android:layout_marginStart="10dp"
                 android:text="Disconnected"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
@@ -74,9 +71,6 @@
                 android:id="@+id/dot"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/status"
                 android:scaleType="centerInside"
                 android:src="@drawable/red_dot" />
         </LinearLayout>
@@ -88,6 +82,4 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="Made by Yavor Ivanov" />
-
-
 </RelativeLayout>
