@@ -61,18 +61,17 @@ public class PairedDevices extends AppCompatActivity {
             bt_layout.setOrientation(LinearLayout.VERTICAL);
             layout.addView(bt_layout);
 
-
+            int id =1;
             for (final BluetoothDevice device : pairedDevices) {
                 final String deviceName = device.getName();
                 String deviceHardwareAddress = device.getAddress(); // MAC address
-
-                for (int i = 1; i < pairedDevices.size(); i++) {
+               //for (int i = 1; i < pairedDevices.size(); i++) {
                     Button view = new Button(this);
                     view.setText(deviceName + "  " + deviceHardwareAddress);
                     view.setPadding(4, 4, 4, 4);
                     view.setTextSize(16);
                     view.setLayoutParams(param);
-                    view.setId(i);
+                    view.setId(id);
                     bt_layout.addView(view);
                     view.setClickable(true);
                     view.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +90,8 @@ public class PairedDevices extends AppCompatActivity {
                             }
                         }
                     });
-                }
+                    id++;
+               // }
             }
         }
     }

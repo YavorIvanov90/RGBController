@@ -104,7 +104,7 @@ public class ConnectedThread extends Thread {
         }
     }
 
-    public Handler getmHandler(){
+    public Handler getHandler(){
         return mHandler;
     }
 }

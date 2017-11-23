@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void btList(View view) {
         intent = new Intent(MainActivity.this, PairedDevices.class);
+        Bundle a = new Bundle();
         startActivity(intent);
         // finish();
     }

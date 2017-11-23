@@ -124,4 +124,14 @@ public class ConnectThread extends Thread {
             Log.e(TAG, "Could not close the client socket", e);
         }
     }
+
+    public BluetoothDevice getDevice(){
+        return  mmDevice;
+    }
+    public BluetoothSocket getSocket() {
+        return mmSocket;
+    }
+    public ConnectedThread getThread(){
+        return mmThread;
+    }
 }
