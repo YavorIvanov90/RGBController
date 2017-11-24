@@ -38,7 +38,7 @@ public class Relays extends AppCompatActivity {
     private LinearLayout layout;
     private int numberOfRelays;
     private boolean save_state;
-   // private final SharedPreferences.Editor editor= sharedPref.edit();
+    // private final SharedPreferences.Editor editor= sharedPref.edit();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,10 +46,11 @@ public class Relays extends AppCompatActivity {
         setContentView(R.layout.relays);
 
         sharedPref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
-         final SharedPreferences.Editor editor = sharedPref.edit();
+        final SharedPreferences.Editor editor = sharedPref.edit();
 
-       // save_state = sharedPref.getBoolean("Switch2", false);
-       numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
+        // save_state = sharedPref.getBoolean("Switch2", false);
+        numberOfRelays = sharedPref.getInt("Relays", numberOfRelays);
+        save_state = sharedPref.getBoolean("Switch2", false);
 
 
         layout = findViewById(R.id.relays_layout);
@@ -74,14 +75,16 @@ public class Relays extends AppCompatActivity {
                 mView.setText("Relay: " + i);
                 mView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 mView.setTextColor(Color.BLACK);
+                mSwitch.setId(i);
                 mSwitch.setLayoutParams(param3);
                 if (save_state) {
                     mSwitch.setChecked(sharedPref.getBoolean(mView.getText().toString(), false));
+                    sendData(mSwitch.getId(), sharedPref.getBoolean(mView.getText().toString(), false));
                 } else {
                     mSwitch.setChecked(false);
                 }
                 mSwitch.setClickable(true);
-                mSwitch.setId(i);
+
                 layout2.addView(mView);
                 layout2.addView(mSwitch);
                 layout1.addView(layout2);
@@ -91,6 +94,7 @@ public class Relays extends AppCompatActivity {
                         boolean status = compoundButton.isChecked();
                         if (save_state) {
                             editor.putBoolean(mView.getText().toString(), compoundButton.isChecked());
+                            editor.commit();
                         }
                         sendData(mSwitch.getId(), status);
                     }
@@ -128,7 +132,7 @@ public class Relays extends AppCompatActivity {
 
     private void sendData(int id, boolean status) {
         String value = Integer.toString(id);
-        value += ":" + status + '\n';
+        value = "Relay:" + value + ":" + status + '\n';
         try {
             MainActivity.getThread().write(value.getBytes());
         } catch (NullPointerException e) {

@@ -39,6 +39,7 @@ public class RGBControl extends AppCompatActivity {
     private EditText hexColor;
     private Intent intent;
     private String valueToSend;
+    private int btId[] = {R.id.buttonMode1, R.id.buttonMode2, R.id.buttonMode3, R.id.buttonMode4, R.id.buttonMode5, R.id.buttonMode6};
 
     private static BluetoothDevice mmDevice;
     private static BluetoothSocket mmSocket;
@@ -77,6 +78,7 @@ public class RGBControl extends AppCompatActivity {
                 redBarChange();
                 greenBarChange();
                 blueBarChange();
+                modeButtons();
                 updateValue();
             }
         } else {
@@ -129,7 +131,10 @@ public class RGBControl extends AppCompatActivity {
             green_value = 1;
             blue_value = 1;
         }
-        updateValue();
+        mmThread.write(("RGB:"+Integer.toString(red_value) + "R!" + '\n').getBytes());
+        mmThread.write(("RGB:"+Integer.toString(green_value) + "G!" + '\n').getBytes());
+        mmThread.write(("RGB:"+Integer.toString(blue_value) + "B!" + '\n').getBytes());
+       // updateValue();
 
     }
 
@@ -154,7 +159,7 @@ public class RGBControl extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 red_value = seekBar.getProgress();
-                valueToSend = Integer.toString(red_value) + "R!" + '\n';
+                valueToSend = "RGB:"+Integer.toString(red_value) + "R!" + '\n';
                 Log.d("OnProgressChanges", Integer.toString(red_value));
                 updateValue();
             }
@@ -175,7 +180,7 @@ public class RGBControl extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 green_value = seekBar.getProgress();
-                valueToSend = Integer.toString(green_value) + "G!" + '\n';
+                valueToSend = "RGB:"+Integer.toString(green_value) + "G!" + '\n';
                 //Log.i("OnProgressChanges", Integer.toString(green_value));
                 greenBarValue.setText((Integer.toString(green_value)));
                 updateValue();
@@ -197,7 +202,7 @@ public class RGBControl extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 blue_value = seekBar.getProgress();
-                valueToSend = Integer.toString(blue_value) + "B!" + '\n';
+                valueToSend = "RGB:"+Integer.toString(blue_value) + "B!" + '\n';
                 //  Log.i("OnProgressChanges", Integer.toString(blue_value));
                 blueBarValue.setText(Integer.toString(blue_value));
                 updateValue();
@@ -212,6 +217,19 @@ public class RGBControl extends AppCompatActivity {
                 // blue_value = seekBar.getProgress();
             }
         });
+    }
+
+    private void modeButtons() {
+        for (int i = 0; i < btId.length; i++) {
+            final Button bt = findViewById(btId[i]);
+            bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String btName = "Mode:" + bt.getText().toString() + '\n';
+                    mmThread.write(btName.getBytes());
+                }
+            });
+        }
     }
 
     private void updateValue() {
@@ -230,8 +248,10 @@ public class RGBControl extends AppCompatActivity {
 
         string = Integer.toString(red_value) + "." + Integer.toString(green_value) + "." + Integer.toString(blue_value) + ")";
         // mmThread.write(string.getBytes());
+        char ch = 'z';
         if (valueToSend != null) {
             mmThread.write(valueToSend.getBytes());
+            mmThread.write(String.valueOf(ch).getBytes());
             Log.i("RGBController", valueToSend);
             updateColorDot();
         }

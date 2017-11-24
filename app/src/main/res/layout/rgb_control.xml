@@ -2,14 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fefbd8">
+    android:background="#c9e698">
 
 
     <LinearLayout
         android:id="@+id/barsLayout"
-        android:layout_below="@id/color_dot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/color_dot"
         android:layout_margin="4dp"
         android:orientation="vertical">
 
@@ -25,10 +25,7 @@
                 android:id="@+id/redBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/enableDisableButton"
-                android:layout_weight="9"
+                android:layout_weight="8"
                 android:max="255"
                 android:min="0"
                 android:paddingBottom="10dp"
@@ -41,8 +38,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
                 android:layout_weight="1"
+                android:gravity="left"
                 android:text="0"
                 android:textColor="@android:color/holo_red_light"
                 android:textSize="20sp" />
@@ -60,7 +57,7 @@
                 android:id="@+id/greenBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="9"
+                android:layout_weight="8"
                 android:max="255"
                 android:min="0"
                 android:paddingBottom="10dp"
@@ -73,8 +70,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
                 android:layout_weight="1"
+                android:gravity="left"
                 android:text="0"
                 android:textColor="@android:color/holo_green_light"
                 android:textSize="20sp" />
@@ -93,10 +90,7 @@
                 android:id="@+id/blueBar"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/greenBar"
-                android:layout_weight="9"
+                android:layout_weight="8"
                 android:max="255"
                 android:min="0"
                 android:paddingBottom="10dp"
@@ -108,12 +102,9 @@
                 android:id="@+id/blueBarValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/greenBar"
                 android:layout_gravity="center"
-                android:layout_marginLeft="30dp"
-                android:layout_toLeftOf="@+id/dot"
-                android:layout_toStartOf="@+id/dot"
                 android:layout_weight="1"
+                android:gravity="left"
                 android:text="0"
                 android:textColor="@android:color/holo_blue_light"
                 android:textSize="20sp" />
@@ -158,8 +149,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/hexColorLayout"
-        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
         android:orientation="horizontal">
 
 
@@ -171,16 +162,19 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/buttonMode1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1" />
 
             <Button
+                android:id="@+id/buttonMode2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="2" />
 
             <Button
+                android:id="@+id/buttonMode3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3" />
@@ -197,16 +191,19 @@
             android:orientation="vertical">
 
             <Button
+                android:id="@+id/buttonMode4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="4" />
 
             <Button
+                android:id="@+id/buttonMode5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5" />
 
             <Button
+                android:id="@+id/buttonMode6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6" />
