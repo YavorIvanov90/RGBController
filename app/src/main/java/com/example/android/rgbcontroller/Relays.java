@@ -77,17 +77,16 @@ public class Relays extends AppCompatActivity {
                 mView.setTextColor(Color.BLACK);
                 mSwitch.setId(i);
                 mSwitch.setLayoutParams(param3);
+                mSwitch.setClickable(true);
+                layout2.addView(mView);
+                layout2.addView(mSwitch);
+                layout1.addView(layout2);
                 if (save_state) {
                     mSwitch.setChecked(sharedPref.getBoolean(mView.getText().toString(), false));
                     sendData(mSwitch.getId(), sharedPref.getBoolean(mView.getText().toString(), false));
                 } else {
                     mSwitch.setChecked(false);
                 }
-                mSwitch.setClickable(true);
-
-                layout2.addView(mView);
-                layout2.addView(mSwitch);
-                layout1.addView(layout2);
                 mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -112,17 +111,31 @@ public class Relays extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_0:{
+                intent = new Intent(Relays.this,MainActivity.class);
+              //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+            }
             case R.id.item_1: {
                 intent = new Intent(Relays.this, Settings.class);
+             //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
             }
             case R.id.item_2: {
                 intent = new Intent(Relays.this, RGBControl.class);
+            //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
             }
             case R.id.item_3: {
+                break;
+            }
+            case R.id.item_4: {
+                intent = new Intent(Relays.this, Motor.class);
+                //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
             }
         }
@@ -133,13 +146,11 @@ public class Relays extends AppCompatActivity {
     private void sendData(int id, boolean status) {
         String value = Integer.toString(id);
         value = "Relay:" + value + ":" + status + '\n';
-        try {
+        if(MainActivity.getThread() != null){
             MainActivity.getThread().write(value.getBytes());
-        } catch (NullPointerException e) {
-            Log.e("Relays", e.toString());
+        } else {
             Switch aSwitch = findViewById(id);
             aSwitch.setChecked(false);
-
         }
     }
 

@@ -2,46 +2,31 @@ package com.example.android.rgbcontroller;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHealthAppConfiguration;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.Set;
-
-import android.os.Handler;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    private static Intent intent;
+
     public static BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     private static BluetoothDevice mmDevice;
     private static BluetoothSocket mmSocket;
@@ -180,19 +165,32 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
+            case R.id.item_0: {
+                break;
+            }
             case R.id.item_1: {
                 intent = new Intent(MainActivity.this, Settings.class);
+                //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
             }
             case R.id.item_2: {
                 intent = new Intent(MainActivity.this, RGBControl.class);
+                //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
             }
             case R.id.item_3: {
                 intent = new Intent(MainActivity.this, Relays.class);
+                //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+            }
+            case R.id.item_4: {
+                intent = new Intent(MainActivity.this, Motor.class);
+                //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
             }
@@ -212,13 +210,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btList(View view) {
+        Intent intent;
         intent = new Intent(MainActivity.this, PairedDevices.class);
         Bundle a = new Bundle();
         startActivity(intent);
         // finish();
     }
-    public void disconnect(View view){
-        if(mmSocket!=null) {
+
+    public void disconnect(View view) {
+        if (mmSocket != null) {
             try {
                 mmSocket.close();
             } catch (IOException e) {

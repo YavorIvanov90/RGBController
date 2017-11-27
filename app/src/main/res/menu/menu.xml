@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/item_0"
+        android:title="Home"></item>
     <item android:id="@+id/item_1"
         android:title="Settings"
         ></item>
@@ -7,6 +9,8 @@
         android:title="RGB Strip"
         ></item>
     <item android:id="@+id/item_3"
-        android:title="Relays"
+        android:title="Relays/Pins"
         ></item>
+    <item android:id="@+id/item_4"
+        android:title="Motor"></item>
 </menu>

@@ -26,18 +26,28 @@ import android.widget.Toast;
 
 public class Settings extends AppCompatActivity {
 
+    private SharedPreferences sharedPref;
+
     private Switch aSwitch1;
     private Switch aSwitch2;
-    private SharedPreferences sharedPref;
+    private Switch aSwitch3;
+
     private boolean switch1_state = false;
     private boolean switch2_state = false;
+    private boolean Switch3_state = false;
+
     private String deviceNameSaved;
     private Intent intent;
 
     private int numberOfRelays;
+    private int numberOfMotors;
     private TextView numberOfRelaysText;
-    private Button buttonPlus;
-    private Button buttonMinus;
+    private TextView numberOfMotorsText;
+    private Button buttonPlus2;
+    private Button buttonMinus2;
+
+    private Button buttonPlus3;
+    private Button buttonMinus3;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +57,16 @@ public class Settings extends AppCompatActivity {
 
         aSwitch1 = findViewById(R.id.switch1);
         aSwitch2 = findViewById(R.id.switch2);
+        //aSwitch3 = findViewById(R.id.switch3);
+
 
         numberOfRelaysText = findViewById(R.id.numberOfRelays);
-        buttonPlus = findViewById(R.id.buttonPlus);
-        buttonMinus = findViewById(R.id.buttonMinus);
+        numberOfMotorsText = findViewById(R.id.numberOfMotors);
+        buttonPlus2 = findViewById(R.id.buttonPlus2);
+        buttonMinus2 = findViewById(R.id.buttonMinus2);
+
+        buttonPlus3 = findViewById(R.id.buttonPlus3);
+        buttonMinus3 = findViewById(R.id.buttonMinus3);
 
         if (sharedPref != null) {
             switch1_state = sharedPref.getBoolean("Switch1", switch1_state);
@@ -59,11 +75,12 @@ public class Settings extends AppCompatActivity {
             aSwitch2.setChecked(switch2_state);
             deviceNameSaved = sharedPref.getString("Name", deviceNameSaved);
             numberOfRelays = sharedPref.getInt("Relays", 0);
+            numberOfMotors = sharedPref.getInt("Motors",0);
             numberOfRelaysText.setText(String.valueOf(numberOfRelays));
-
+            numberOfMotorsText.setText(String.valueOf(numberOfMotors));
         }
 
-        buttonPlus.setOnClickListener(new View.OnClickListener() {
+        buttonPlus2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (numberOfRelays == 50) {
@@ -76,7 +93,7 @@ public class Settings extends AppCompatActivity {
                 }
             }
         });
-        buttonMinus.setOnClickListener(new View.OnClickListener() {
+        buttonMinus2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (numberOfRelays == 0) {
@@ -90,6 +107,33 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        buttonPlus3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numberOfMotors == 50) {
+                    Toast.makeText(Settings.this, "Max 50 motors", Toast.LENGTH_SHORT).show();
+                } else {
+                    numberOfMotors += 1;
+                    numberOfMotorsText.setText(String.valueOf(numberOfMotors));
+                    editor.putInt("Motors",numberOfMotors);
+                    editor.commit();
+                }
+            }
+        });
+        buttonMinus3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (numberOfMotors == 0) {
+                    Toast.makeText(Settings.this, "Min 0 motors", Toast.LENGTH_SHORT).show();
+                } else {
+                    numberOfMotors-= 1;
+                    numberOfMotorsText.setText(String.valueOf(numberOfMotors));
+                    editor.putInt("Motors",numberOfMotors);
+                    editor.commit();
+                }
+            }
+        });
+
         aSwitch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -97,8 +141,6 @@ public class Settings extends AppCompatActivity {
                 editor.commit();
             }
         });
-
-
 
         if (MainActivity.getDevice() != null) {
             aSwitch1.setClickable(true);
@@ -136,17 +178,33 @@ public class Settings extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_0:{
+                intent = new Intent(Settings.this,MainActivity.class);
+              //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+                break;
+            }
             case R.id.item_1: {
                 break;
             }
             case R.id.item_2: {
                 intent = new Intent(Settings.this, RGBControl.class);
+              //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
                 break;
             }
             case R.id.item_3: {
                 intent = new Intent(Settings.this, Relays.class);
+             //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+                break;
+            }
+            case R.id.item_4: {
+                intent = new Intent(Settings.this, Motor.class);
+                //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
                 break;

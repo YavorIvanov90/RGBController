@@ -65,28 +65,6 @@ public class RGBControl extends AppCompatActivity {
         buttonEnterHexColor = findViewById(R.id.hexColorButton);
 
         hexColor = findViewById(R.id.hexColor);
-
-
-        if (MainActivity.getDevice() != null) {
-            mmDevice = MainActivity.getDevice();
-            if (mmDevice.getBondState() == 12) {
-                mmThread = MainActivity.getThread();
-                enableBars();
-                ledControl.setEnabled(true);
-                buttonEnterHexColor.setEnabled(true);
-                hexColor.setEnabled(true);
-                redBarChange();
-                greenBarChange();
-                blueBarChange();
-                modeButtons();
-                updateValue();
-            }
-        } else {
-            disableBars();
-            ledControl.setEnabled(false);
-            buttonEnterHexColor.setEnabled(false);
-            hexColor.setEnabled(false);
-        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,10 +76,17 @@ public class RGBControl extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_0:{
+                intent = new Intent(RGBControl.this,MainActivity.class);
+              //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                break;
+            }
             case R.id.item_1: {
                 intent = new Intent(RGBControl.this, Settings.class);
+              //  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
+             //   finish();
                 break;
             }
             case R.id.item_2: {
@@ -109,8 +94,15 @@ public class RGBControl extends AppCompatActivity {
             }
             case R.id.item_3: {
                 intent = new Intent(RGBControl.this, Relays.class);
+            //    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
+             //   finish();
+                break;
+            }
+            case R.id.item_4: {
+                intent = new Intent(RGBControl.this, Motor.class);
+                //   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
             }
         }
@@ -232,6 +224,14 @@ public class RGBControl extends AppCompatActivity {
         }
     }
 
+    private void disableEnableModeButtons(boolean state){
+        for(int i = 0; i <btId.length;i++){
+            final Button bt = findViewById(btId[i]);
+            bt.setEnabled(state);
+        }
+
+    }
+
     private void updateValue() {
         String string;
         if (red_value == 0 && green_value == 0 && blue_value == 0) {
@@ -273,17 +273,32 @@ public class RGBControl extends AppCompatActivity {
         greenBar.setEnabled(false);
         blueBar.setEnabled(false);
     }
-/*
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-           // setContentView(R.layout.rgb_control);
-            Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (MainActivity.getDevice() != null) {
+            mmDevice = MainActivity.getDevice();
+            if (mmDevice.getBondState() == 12) {
+                mmThread = MainActivity.getThread();
+                enableBars();
+                ledControl.setEnabled(true);
+                buttonEnterHexColor.setEnabled(true);
+                hexColor.setEnabled(true);
+                disableEnableModeButtons(true);
+                redBarChange();
+                greenBarChange();
+                blueBarChange();
+                modeButtons();
+                updateValue();
+            }
+        } else {
+            disableBars();
+            ledControl.setEnabled(false);
+            buttonEnterHexColor.setEnabled(false);
+            hexColor.setEnabled(false);
+            disableEnableModeButtons(false);
         }
-    }*/
+    }
 }
