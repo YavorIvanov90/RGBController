@@ -154,6 +154,7 @@ public class RGBControl extends AppCompatActivity {
                 valueToSend = "RGB:"+Integer.toString(red_value) + "R!" + '\n';
                 Log.d("OnProgressChanges", Integer.toString(red_value));
                 updateValue();
+
             }
 
             @Override
@@ -162,9 +163,12 @@ public class RGBControl extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                // red_value = seekBar.getProgress();
+                red_value = seekBar.getProgress();
+                updateValue();
             }
+
         });
+
     }
 
     private void greenBarChange() {

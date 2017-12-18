@@ -47,33 +47,45 @@ public class Motor extends AppCompatActivity {
         layout1.setOrientation(LinearLayout.VERTICAL);
         float scale = getResources().getDisplayMetrics().density;
         int dpAsPixels = (int) (10 * scale + 0.5f);
+        layout1.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);
         layout.addView(layout1);
         if (numberOfMotors > 0) {
             for (int i = 1; i <= numberOfMotors; i++) {
-                final LinearLayout layout2 = new LinearLayout(Motor.this);
-                LinearLayout.LayoutParams param2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 2);
-                LinearLayout.LayoutParams param3 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 2);
-                layout2.setLayoutParams(param);
-                layout2.setOrientation(LinearLayout.VERTICAL);
+                final LinearLayout motorAllLayout = new LinearLayout(Motor.this);
+                final LinearLayout nameAndValueLayout = new LinearLayout(Motor.this);
+                final LinearLayout.LayoutParams mViewParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 2);
+                final LinearLayout.LayoutParams mValueParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 0);
+                final LinearLayout.LayoutParams barParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 final SeekBar mBar = new SeekBar(this);
                 final TextView mView = new TextView(this);
-                layout2.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
-                mView.setLayoutParams(param2);
+                final TextView mValue = new TextView(this);
+                nameAndValueLayout.setLayoutParams(barParam);
+                motorAllLayout.setLayoutParams(barParam);
+                motorAllLayout.setOrientation(LinearLayout.VERTICAL);
+                nameAndValueLayout.setOrientation(LinearLayout.HORIZONTAL);
+                mView.setLayoutParams(mViewParam);
+                mValue.setLayoutParams(mValueParam);
                 mView.setText("Motor: " + i);
+                mValue.setText("Value: " + mBar.getProgress());
                 mView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                 mView.setTextColor(Color.BLACK);
+                mValue.setTextColor(Color.BLACK);
                 mBar.setMax(100);
                 mBar.setProgress(50);
+                mValue.setText("Value: " + mBar.getProgress());
                 mBar.setId(i);
-                mBar.setLayoutParams(param3);
+                mBar.setLayoutParams(barParam);
                 mBar.setClickable(true);
-                layout2.addView(mView);
-                layout2.addView(mBar);
-                layout1.addView(layout2);
+                nameAndValueLayout.addView(mView);
+                nameAndValueLayout.addView(mValue);
+                motorAllLayout.addView(mBar);
+                layout1.addView(nameAndValueLayout);
+                layout1.addView(motorAllLayout);
 
                 mBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        mValue.setText("Value: " + progress);
                         sendData(seekBar.getId(), progress);
                     }
 
